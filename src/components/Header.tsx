@@ -20,7 +20,8 @@ import {
   Music,
   Image as FileImageIcon,
   FileText,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from 'lucide-react';
 import LogoIcon from './LogoIcon';
 
@@ -166,6 +167,46 @@ export default function Header({
 
       {/* RIGHT: ACCOUNT ENGINE */}
       <div id="header-right" className="flex items-center gap-4">
+
+        {user ? (
+          <div id="header-auth-user" className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-orange-500 to-amber-600 flex items-center justify-center font-bold text-white text-xs shrink-0 overflow-hidden">
+              {user.avatarUrl ? (
+                <img
+                  src={user.avatarUrl}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                user.displayName
+                  ? user.displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+                  : 'U'
+              )}
+            </div>
+            <span className="hidden sm:block text-xs text-zinc-600 dark:text-zinc-300 font-medium max-w-[160px] truncate">
+              {user.email}
+            </span>
+            <button
+              id="header-logout-btn"
+              type="button"
+              onClick={logout}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-zinc-500 hover:text-red-600 dark:text-zinc-400 dark:hover:text-red-400 hover:bg-zinc-100 dark:hover:bg-zinc-900/60 transition"
+              title="Sign out"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">Logout</span>
+            </button>
+          </div>
+        ) : (
+          <button
+            id="header-login-btn"
+            type="button"
+            onClick={openAuth}
+            className="px-3 py-1.5 rounded-lg text-xs font-bold text-orange-500 hover:text-orange-600 hover:bg-orange-500/10 transition"
+          >
+            Login
+          </button>
+        )}
         
         {/* THEME TOGGLE ICON */}
         <button

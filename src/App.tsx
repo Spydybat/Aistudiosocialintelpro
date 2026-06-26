@@ -4,6 +4,9 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
+import { mapSupabaseUserToAppUser } from './lib/auth';
 import { 
   AppView, 
   PlatformType, 
@@ -30,24 +33,34 @@ import { motion, AnimatePresence } from 'motion/react';
 const LOCAL_STORAGE_KEY = 'socialintel_pro_state_v2';
 
 export default function App() {
+  const navigate = useNavigate();
+  const { user: authUser, signOut: authSignOut } = useAuth();
   
   // Theme state
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark');
 
-  // Authenticated user state - default initialized with a premium trial seat matching the user email metadata!
-  const [user, setUser] = useState<User | null>({
-    id: 'usr_sandbox_9012',
-    email: 'kalai23078@gmail.com', // custom personalized detail
-    displayName: 'Kalaiyarasan K',
-    plan: 'Free',
-    billingInterval: 'monthly',
-    joinedAt: '2026-06-18',
-    twoFactorEnabled: false,
-    emailVerified: true,
-    rememberMe: true
-  });
+  // Authenticated user state synced from Supabase Auth
+  const [user, setUser] = useState<User | null>(null);
 
   const [authOpen, setAuthOpen] = useState(false);
+
+  const openAuth = () => navigate('/login');
+
+  useEffect(() => {
+    if (authUser) {
+      const mappedUser = mapSupabaseUserToAppUser(authUser);
+      setUser(mappedUser);
+      setSettings(prev => ({
+        ...prev,
+        account: {
+          displayName: mappedUser.displayName,
+          email: mappedUser.email
+        }
+      }));
+    } else {
+      setUser(null);
+    }
+  }, [authUser]);
 
   // History system - pre-seeded ChatGPT-like histories
   const [history, setHistory] = useState<HistoryItem[]>([
@@ -330,7 +343,6 @@ export default function App() {
     if (cached) {
       try {
         const parsed = JSON.parse(cached);
-        if (parsed.user) setUser(parsed.user);
         if (parsed.history) setHistory(parsed.history);
         if (parsed.downloads) setDownloads(parsed.downloads);
         if (parsed.exports) setExports(parsed.exports);
@@ -439,10 +451,12 @@ export default function App() {
     }));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await authSignOut();
     setUser(null);
     setCurrentView('tools');
     setExplorerTabActive(false);
+    navigate('/login');
   };
 
   const handleAddDownload = (item: Omit<DownloadItem, 'id' | 'progress' | 'status' | 'addedAt'>) => {
@@ -592,7 +606,7 @@ export default function App() {
         deleteHistoryItem={handleDeleteHistoryItem}
         onSelectAction={handleSelectHistoryAction}
         user={user}
-        openAuth={() => setAuthOpen(true)}
+        openAuth={openAuth}
         activeDownloadsCount={activeDownloadsCount}
         isOpen={sidebarOpen}
         setIsOpen={setSidebarOpen}
@@ -608,7 +622,7 @@ export default function App() {
           setCurrentView={navigateTo}
           activePlatform={activePlatform}
           user={user}
-          openAuth={() => setAuthOpen(true)}
+          openAuth={openAuth}
           logout={handleLogout}
           activeDownloadsCount={activeDownloadsCount}
           sidebarOpen={sidebarOpen}
@@ -697,7 +711,7 @@ export default function App() {
                     user={user}
                     onAddDownload={handleAddDownload}
                     onAddExportLog={handleAddExportLog}
-                    openAuth={() => setAuthOpen(true)}
+                    openAuth={openAuth}
                     setExplorerActiveUsername={(usr) => setPresetUsername(usr)}
                     setExplorerActiveTab={() => setExplorerTabActive(true)}
                     selectedToolType={selectedToolType}
@@ -709,7 +723,7 @@ export default function App() {
                     user={user}
                     onAddDownload={handleAddDownload}
                     onAddExportLog={handleAddExportLog}
-                    openAuth={() => setAuthOpen(true)}
+                    openAuth={openAuth}
                     presetUsername={presetUsername}
                   />
                 )}
@@ -751,7 +765,7 @@ export default function App() {
                 <PricingSection 
                   user={user}
                   onUpgradePlan={handleUpgradePlan}
-                  openAuth={() => setAuthOpen(true)}
+                  openAuth={openAuth}
                   invoices={invoices}
                 />
               </motion.div>
