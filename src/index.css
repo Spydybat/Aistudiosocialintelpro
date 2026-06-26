@@ -1,163 +1,559 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-}
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "Inter", sans-serif;
 
-/* Custom scrollbar behaviors */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* ========================================================
-   GLOBAL DARK MODE READABILITY & CONTRAST INJECTIONS
-   ======================================================== */
-.dark {
-  /* 1. Page Background & Frame Fallbacks */
-  background-color: #0F172A !important;
-  color: #FFFFFF !important;
-
-  /* 2. Map standard grey shade values directly to WCAG compliant higher-contrast tones */
-  --color-zinc-950: #0F172A; /* Page Background */
-  --color-zinc-900: #111827; /* Card Background */
-  --color-zinc-850: #1F2937; /* Field borders / dark-gray accent */
-  --color-zinc-800: #1F2937; /* Input Background */
-  --color-zinc-700: #374151; /* Standard Borders */
+  --color-blue-400: #6b77ff;
+  --color-blue-500: #5865F2;
+  --color-blue-600: #5865F2;
+  --color-blue-700: #6b77ff;
   
-  --color-zinc-650: #4B5563;
-  --color-zinc-600: #9CA3AF;
-  --color-zinc-550: #D1D5DB;
-  --color-zinc-500: #9CA3AF; /* Muted Text: #9CA3AF */
-  --color-zinc-450: #D1D5DB;
-  --color-zinc-400: #D1D5DB; /* Secondary Text: #D1D5DB */
-  --color-zinc-350: #D1D5DB;
-  --color-zinc-300: #D1D5DB; /* Secondary Text */
-  --color-zinc-250: #374151;
-  --color-zinc-200: #374151;
-  --color-zinc-150: #FFFFFF;
-  --color-zinc-100: #FFFFFF; /* Primary Text: #FFFFFF */
-  --color-zinc-50: #FFFFFF;
-
-  --color-slate-950: #0F172A;
-  --color-slate-900: #111827;
-  --color-slate-850: #1F2937;
-  --color-slate-800: #1F2937;
-  --color-slate-700: #374151;
-  --color-slate-500: #9CA3AF;
-  --color-slate-400: #D1D5DB;
-  --color-slate-300: #D1D5DB;
-  --color-slate-200: #374151;
-  --color-slate-100: #FFFFFF;
-
-  --color-gray-950: #0F172A;
-  --color-gray-900: #111827;
-  --color-gray-850: #1F2937;
-  --color-gray-800: #1F2937;
-  --color-gray-700: #374151;
-  --color-gray-500: #9CA3AF;
-  --color-gray-400: #D1D5DB;
-  --color-gray-300: #D1D5DB;
-  --color-gray-200: #374151;
-  --color-gray-100: #FFFFFF;
+  --color-indigo-400: #6b77ff;
+  --color-indigo-500: #5865F2;
+  --color-indigo-600: #5865F2;
+  --color-indigo-700: #6b77ff;
 }
 
-/* 3. Explicit Contrast Overrides to force standard element visibility */
-.dark input,
-.dark textarea,
-.dark select {
-  color: #FFFFFF !important;
-  background-color: #1F2937 !important;
-  border-color: #374151 !important;
-}
+:root, body, html { font-family: 'Inter', sans-serif !important; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+p, span, div, a, label, h1, h2, h3, h4, h5, h6, b, strong { font-family: 'Inter', sans-serif; }
+*, ::before, ::after { border-color: #e2e8f0; }
 
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: #9CA3AF !important;
-  opacity: 1 !important;
-}
+/* SVG Icon Base */
+svg { color: #4B5563; }
 
-/* Select option styles in dark mode to prevent black-foreground/black-background issues */
-.dark select option {
-  background-color: #1F2937 !important;
+/* =========================================
+   GLOBAL OVERRIDES (NO ORANGE, NO SPECIAL CARDS)
+   ========================================= */
+
+/* No Orange Icons / Profile Avatar Gradient Replacements */
+.text-orange-400, .text-orange-500, .text-orange-550, .text-orange-600, .text-orange-650 { color: #5865F2 !important; }
+svg.text-orange-400, svg.text-orange-500, svg.text-orange-550, svg.text-orange-600,
+.text-orange-400 svg, .text-orange-500 svg, .text-orange-550 svg, .text-orange-600 svg { color: #5865F2 !important; }
+
+/* Profile User Icon Background Gradient */
+.from-orange-500, .to-amber-600, [class*="from-orange-500"], [class*="to-amber-600"] {
+  background: #5865F2 !important;
   color: #FFFFFF !important;
 }
 
-/* Enforce visibility on labels and descriptions without breaking layout or font sizes */
-.dark label,
-.dark .text-zinc-500,
-.dark .text-gray-500,
-.dark .text-slate-500 {
-  color: #D1D5DB !important; /* Secondary readable grey text */
+/* Reset Twitter text */
+aside .text-blue-400, aside .text-[#1DA1F2],
+aside .text-blue-400 svg, aside .text-[#1DA1F2] svg {
+  color: inherit !important;
 }
 
-.dark .text-zinc-400,
-.dark .text-gray-400,
-.dark .text-slate-400,
-.dark .text-zinc-450,
-.dark .text-zinc-550 {
-  color: #D1D5DB !important; /* Secondary readable text */
+/* =========================================
+   LIGHT THEME (MODERN SAAS STYLE)
+   ========================================= */
+
+/* BACKGROUNDS */
+:root, body, #socialintel-app-root {
+  background-color: #F8FAFC !important;
+  color: #111827 !important;
+  color-scheme: light !important;
 }
 
-.dark .text-zinc-300,
-.dark .text-gray-300,
-.dark .text-slate-300 {
+/* STRUCTURAL (Sidebar & Header) */
+header, aside, .h-14, .border-r {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #111827 !important;
+}
+
+/* PROFILE DROPDOWN / MENUS */
+.absolute.bg-white, .absolute.bg-zinc-900, div[role="menu"] {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  border: 1px solid #E2E8F0 !important;
+}
+.absolute.bg-white span, .absolute.bg-zinc-900 span, div[role="menu"] span, div[role="menu"] p, div[role="menu"] a, .absolute.bg-white .text-zinc-500 {
+  color: #4B5563 !important; /* Secondary text */
+}
+.absolute.bg-white h4, .absolute.bg-zinc-900 h4, div[role="menu"] h4, .absolute.bg-white b, .absolute.bg-white strong {
+  color: #111827 !important; /* Primary text */
+}
+.absolute.bg-white svg, .absolute.bg-zinc-900 svg, div[role="menu"] svg {
+  color: #4B5563 !important;
+}
+
+/* BUTTONS */
+button, a[role="button"] {
+  border-radius: 6px !important;
+  transition: all 0.15s ease-in-out !important;
+  color: #111827 !important; /* All non-primary button text */
+}
+button:active { transform: translateY(1px) !important; }
+
+/* SECONDARY/UTILITY BUTTONS (Including Tool Download/Exports) */
+.bg-zinc-100, .bg-gray-100, .bg-zinc-200, button.bg-zinc-900, button.bg-zinc-800, button.bg-zinc-700, button.bg-zinc-950 {
+  background-color: #FFFFFF !important;
+  color: #111827 !important;
+  border: 1px solid #E2E8F0 !important;
+}
+.bg-zinc-100 svg, .bg-gray-100 svg, .bg-zinc-200 svg, button.bg-zinc-900 svg, button.bg-zinc-800 svg { color: #4B5563 !important; }
+
+/* CARDS */
+.bg-white, .bg-zinc-50, .bg-zinc-100, .rounded-xl.border, .rounded-2xl {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03) !important;
+}
+.bg-white h1, .bg-white h2, .bg-white h3, .bg-white h4, .bg-white .font-bold, .rounded-xl.border h1, .rounded-xl.border h2, .rounded-xl.border h3, .rounded-xl.border h4, .bg-white b, .bg-white strong {
+  color: #111827 !important;
+}
+.bg-white p, .bg-white span, .bg-white div, .bg-white label, .rounded-xl.border p, .rounded-xl.border span, .rounded-xl.border div {
+  color: #4B5563; /* Secondary text */
+}
+/* Ensure dark text mapping never bleeds into white background */
+.bg-white .text-white, .rounded-xl.border .text-white { color: #111827 !important; }
+
+/* ELEVATED SURFACES */
+[class*="shadow-2xl"], [class*="shadow-lg"], .bg-zinc-900\/95 {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ACCOUNT EXPLORER IMPORTANT GUIDE & EXPORT SYSTEM CARD */
+div.bg-orange-500\/\[0\.02\], div[class*="bg-orange-500/[0.02]"],
+div.bg-orange-500\/\[0\.01\], div[class*="bg-orange-500/[0.01]"],
+div.bg-blue-50, div[class*="bg-blue-50"], div.bg-orange-50, div[class*="bg-orange-50"] {
+  background-color: #FFFFFF !important;
+  border-color: #E2E8F0 !important;
+  color: #4B5563 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+div.bg-orange-500\/\[0\.02\] span, div[class*="bg-orange-500/[0.02]"] span,
+div.bg-orange-500\/\[0\.02\] p, div[class*="bg-orange-500/[0.02]"] p {
+  color: #4B5563 !important; /* Description */
+}
+div.bg-orange-500\/\[0\.02\] b, div[class*="bg-orange-500/[0.02]"] b,
+div.bg-orange-500\/\[0\.01\] h4, div[class*="bg-orange-500/[0.01]"] h4,
+div.bg-orange-500\/\[0\.02\] strong { 
+  color: #111827 !important; /* Heading */
+}
+div.bg-orange-500\/\[0\.02\] svg, div[class*="bg-orange-500/[0.02]"] svg { 
+  color: #5865F2 !important; 
+}
+div.bg-orange-500\/\[0\.01\] svg, div[class*="bg-orange-500/[0.01]"] svg { 
+  color: #4B5563 !important; 
+}
+div.bg-orange-500\/\[0\.02\] .text-zinc-500, div[class*="bg-orange-500/[0.02]"] .text-zinc-500 {
+  color: #6B7280 !important; /* Muted */
+}
+
+/* LIGHT TEXT COLORS (Catch-all) */
+h1, h2, h3, h4, h5, h6, .font-bold, .font-extrabold { color: #111827 !important; }
+.text-zinc-900, .text-zinc-800, .text-gray-900, .text-slate-900, .text-black, .text-white { color: #111827 !important; }
+.text-zinc-600, .text-zinc-700, .text-gray-600, .text-slate-600 { color: #4B5563 !important; }
+.text-zinc-400, .text-zinc-500, .text-gray-400, .text-slate-400 { color: #6B7280 !important; }
+p, span, div, label { color: #4B5563; } /* Safe default */
+
+/* INPUTS */
+input, textarea, select {
+  background-color: #FFFFFF !important;
+  border: 1px solid #D1D5DB !important;
+  color: #111827 !important;
+  border-radius: 6px !important;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #5865F2 !important;
+  box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.25) !important;
+  outline: none !important;
+}
+input::placeholder, textarea::placeholder { color: #6B7280 !important; opacity: 1 !important; }
+select option { background-color: #FFFFFF !important; color: #111827 !important; }
+
+/* ICONS (Light Theme Global) */
+svg, aside svg, header svg, button svg, a svg, td svg, li svg, .flex svg, .relative svg {
+  color: #4B5563 !important;
+}
+/* Ensure Profile/Export #5865F2 icons stay blue */
+svg.text-orange-400, svg.text-orange-500, svg.text-orange-550, svg.text-orange-600,
+.text-orange-400 svg, .text-orange-500 svg, .text-orange-550 svg, .text-orange-600 svg { color: #5865F2 !important; }
+
+/* ICON HOVER STATES (Light Theme) */
+button:hover svg, a:hover svg, aside button:hover svg, aside a:hover svg, header button:hover svg, header a:hover svg {
+  color: #5865F2 !important;
+}
+
+button.hover\:bg-blue-50:hover, button.hover\:bg-zinc-100:hover, button.hover\:bg-gray-100:hover,
+a.hover\:bg-blue-50:hover, a.hover\:bg-zinc-100:hover, a.hover\:bg-gray-100:hover,
+.hover\:bg-zinc-100:hover {
+  background-color: rgba(88, 101, 242, 0.12) !important;
+  border-color: rgba(88, 101, 242, 0.2) !important;
+}
+
+/* ACTIVE SIDEBAR */
+aside .bg-zinc-100, aside .bg-gray-100, aside .bg-blue-50, aside .hover\:bg-blue-50:hover, aside .active {
+  color: #5865F2 !important;
+  background-color: rgba(88, 101, 242, 0.12) !important;
+}
+aside .bg-zinc-100 svg, aside .bg-gray-100 svg, aside .bg-blue-50 svg, aside .hover\:bg-blue-50:hover svg, aside .active svg {
+  color: #5865F2 !important;
+}
+
+
+/* =========================================
+   DOWNLOAD CENTER ACTION BUTTONS
+   ========================================= */
+
+#download-center-view button,
+#download-center-view a[role="button"],
+#dl-selected-zip-btn,
+#dl-all-media-zip-btn,
+[id^="btn-open-"],
+[id^="btn-toggle-details-"],
+[id^="btn-remove-"] {
+  background-color: transparent !important;
+  color: #111827 !important;
+  border-color: #E2E8F0 !important;
+  border: 1px solid #E2E8F0 !important;
+  box-shadow: none !important;
+}
+
+.dark #download-center-view button,
+.dark #download-center-view a[role="button"],
+.dark #dl-selected-zip-btn,
+.dark #dl-all-media-zip-btn,
+.dark [id^="btn-open-"],
+.dark [id^="btn-toggle-details-"],
+.dark [id^="btn-remove-"] {
+  background-color: transparent !important;
+  color: #FFFFFF !important;
+  border-color: #2b2f38 !important;
+  border: 1px solid #2b2f38 !important;
+}
+
+#download-center-view button:hover,
+#download-center-view a[role="button"]:hover,
+#dl-selected-zip-btn:hover,
+#dl-all-media-zip-btn:hover,
+[id^="btn-open-"]:hover,
+[id^="btn-toggle-details-"]:hover,
+[id^="btn-remove-"]:hover {
+  background-color: rgba(88,101,242,0.12) !important;
+  color: #5865F2 !important;
+  border-color: rgba(88,101,242,0.2) !important;
+}
+
+#download-center-view button svg,
+#download-center-view a[role="button"] svg,
+#dl-selected-zip-btn svg,
+#dl-all-media-zip-btn svg,
+[id^="btn-open-"] svg,
+[id^="btn-toggle-details-"] svg,
+[id^="btn-remove-"] svg {
+  color: #4B5563 !important;
+}
+
+.dark #download-center-view button svg,
+.dark #download-center-view a[role="button"] svg,
+.dark #dl-selected-zip-btn svg,
+.dark #dl-all-media-zip-btn svg,
+.dark [id^="btn-open-"] svg,
+.dark [id^="btn-toggle-details-"] svg,
+.dark [id^="btn-remove-"] svg {
   color: #D1D5DB !important;
 }
 
-.dark .text-zinc-950,
-.dark .text-zinc-900,
-.dark .text-zinc-800,
-.dark .text-zinc-700,
-.dark .text-zinc-600 {
-  /* Elevate darker texts into pure white / lighter grey in darkmode */
-  color: #FFFFFF !important;
+#download-center-view button:hover svg,
+#download-center-view a[role="button"]:hover svg,
+#download-center-view button:active svg,
+#download-center-view a[role="button"]:active svg,
+#dl-selected-zip-btn:hover svg,
+#dl-all-media-zip-btn:hover svg,
+[id^="btn-open-"]:hover svg,
+[id^="btn-toggle-details-"]:hover svg,
+[id^="btn-remove-"]:hover svg {
+  color: #5865F2 !important;
 }
 
-/* Do not overwrite distinct brandings or alerts */
-.dark .text-orange-500,
-.dark .text-orange-600,
-.dark .text-amber-500,
-.dark .text-red-500,
-.dark .text-red-400,
-.dark .text-green-500,
-.dark .text-green-400 {
-  /* Keep color codes for semantic meanings */
-}
-
-/* ========================================================
-   DARK MODE URL INPUT FIELDS EXPLICIT overrides
-   ======================================================== */
-.dark #all-downloader-url-input,
-.dark #standalone-url-input {
-  background-color: #111827 !important;
-  border-color: #374151 !important;
-  color: #FFFFFF !important;
-}
-
-.dark #all-downloader-url-input::placeholder,
-.dark #standalone-url-input::placeholder {
-  color: #9CA3AF !important;
+/* Ensure Button Text stays 100% visible and highlights on hover */
+#download-center-view button span,
+#download-center-view a[role="button"] span,
+[id^="btn-open-"] span,
+[id^="btn-toggle-details-"] span,
+[id^="btn-remove-"] span {
+  color: #111827 !important;
   opacity: 1 !important;
 }
-
-.dark #all-downloader-url-input:hover,
-.dark #standalone-url-input:hover {
-  border-color: #4B5563 !important;
+.dark #download-center-view button span,
+.dark #download-center-view a[role="button"] span,
+.dark [id^="btn-open-"] span,
+.dark [id^="btn-toggle-details-"] span,
+.dark [id^="btn-remove-"] span {
+  color: #FFFFFF !important;
+}
+#download-center-view button:hover span,
+#download-center-view a[role="button"]:hover span,
+[id^="btn-open-"]:hover span,
+[id^="btn-toggle-details-"]:hover span,
+[id^="btn-remove-"]:hover span {
+  color: #5865F2 !important;
 }
 
-.dark #all-downloader-url-input:focus,
-.dark #standalone-url-input:focus {
-  border-color: #3B82F6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
-  outline: none !important;
+
+/* =========================================
+   DOWNLOAD CENTER TEXT & METADATA VISIBILITY
+   ========================================= */
+
+/* File Names */
+#download-center-view .font-semibold.text-sm.truncate,
+#download-center-view .font-mono.font-semibold.truncate {
+  color: #111827 !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view .font-semibold.text-sm.truncate,
+.dark #download-center-view .font-mono.font-semibold.truncate {
+  color: #FFFFFF !important;
 }
 
+/* Expanded Details Metadata Values */
+#download-center-view .text-zinc-800.font-semibold,
+#download-center-view .text-zinc-800.truncate,
+#download-center-view .text-zinc-800.font-mono {
+  color: #111827 !important;
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view .text-zinc-200.font-semibold,
+.dark #download-center-view .text-zinc-200.truncate,
+.dark #download-center-view .text-zinc-200.font-mono,
+.dark #download-center-view .text-zinc-800.font-semibold,
+.dark #download-center-view .text-zinc-800.truncate,
+.dark #download-center-view .text-zinc-800.font-mono {
+  color: #FFFFFF !important;
+}
 
+/* Details Keys (File Type, File Size, Created Date, Source Tool) */
+#download-center-view .text-\[10px\].uppercase.tracking-wider {
+  color: #4B5563 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view .text-\[10px\].uppercase.tracking-wider {
+  color: #D1D5DB !important;
+}
+
+/* Card Metadata row (Size, Timestamp, Bullets) */
+#download-center-view .text-\[11px\].text-zinc-500 {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view .text-\[11px\].text-zinc-500 {
+  color: #9CA3AF !important;
+}
+
+/* File Type Badge beside name */
+#download-center-view .bg-zinc-100.text-zinc-500.rounded {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view .bg-zinc-100.text-zinc-500.rounded,
+.dark #download-center-view .bg-zinc-900.text-zinc-500.rounded {
+  color: #9CA3AF !important;
+}
+
+/* Headers and Section Titles ('Today', 'Downloads') */
+#download-center-view h2 { color: #111827 !important; opacity: 1 !important; }
+.dark #download-center-view h2 { color: #FFFFFF !important; }
+
+#download-center-view h3.text-xs.font-bold {
+  color: #6B7280 !important;
+  opacity: 1 !important;
+}
+.dark #download-center-view h3.text-xs.font-bold {
+  color: #9CA3AF !important;
+}
+
+/* Status Labels */
+#download-center-view .text-emerald-500 { color: #22C55E !important; opacity: 1 !important; font-weight: 600 !important; }
+#download-center-view .text-blue-500 { color: #5865F2 !important; opacity: 1 !important; font-weight: 600 !important; }
+#download-center-view .text-red-500 { color: #EF4444 !important; opacity: 1 !important; font-weight: 600 !important; }
+#download-center-view .text-amber-500 { color: #F59E0B !important; opacity: 1 !important; font-weight: 600 !important; }
+
+/* Platform Label */
+#download-center-view .text-orange-500 { color: #5865F2 !important; opacity: 1 !important; }
+
+
+/* =========================================
+   DARK THEME (DISCORD STYLE)
+   ========================================= */
+
+.dark {
+  background-color: #0f1117 !important;
+  color: #FFFFFF !important;
+  color-scheme: dark !important;
+}
+
+/* DARK STRUCTURAL */
+.dark header, .dark aside, .dark .h-14, .dark .border-r {
+  background-color: #181a20 !important;
+  border-color: #2b2f38 !important;
+  color: #FFFFFF !important;
+}
+.dark aside span, .dark header span, .dark aside div, .dark header div, .dark aside p, .dark header p {
+  color: #FFFFFF !important;
+}
+
+/* DARK PROFILE DROPDOWN / MENUS */
+.dark .absolute.bg-white, .dark .absolute.bg-zinc-900, .dark div[role="menu"], .dark [class*="shadow-2xl"], .dark [class*="shadow-lg"], .dark .bg-zinc-900\/95 {
+  background-color: #1E2128 !important;
+  border-color: #2b2f38 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .absolute.bg-white span, .dark .absolute.bg-zinc-900 span, .dark div[role="menu"] span, .dark div[role="menu"] p, .dark div[role="menu"] a, .dark .absolute.bg-zinc-900 .text-zinc-400 {
+  color: #D1D5DB !important; /* Secondary */
+}
+.dark .absolute.bg-white h4, .dark .absolute.bg-zinc-900 h4, .dark div[role="menu"] h4, .dark .absolute.bg-zinc-900 b, .dark .absolute.bg-zinc-900 strong {
+  color: #FFFFFF !important; /* Primary */
+}
+
+/* DARK BUTTONS */
+.dark button, .dark a[role="button"] { color: #FFFFFF !important; }
+
+/* DARK CARDS */
+.dark .bg-white, .dark .bg-zinc-50, .dark .bg-zinc-100, .dark .rounded-xl.border, .dark .rounded-2xl {
+  background-color: #1e2128 !important;
+  border-color: #2b2f38 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
+}
+.dark .bg-white h1, .dark .bg-white h2, .dark .bg-white h3, .dark .bg-white h4, .dark .bg-white .font-bold,
+.dark .rounded-xl.border h1, .dark .rounded-xl.border h2, .dark .rounded-xl.border h3, .dark .rounded-xl.border h4,
+.dark .bg-white b, .dark .bg-white strong {
+  color: #FFFFFF !important; /* Card Titles */
+}
+
+/* Dark Mode Export System Card & Important Guide */
+.dark div.bg-orange-500\/\[0\.02\], .dark div[class*="bg-orange-500/[0.02]"],
+.dark .border-orange-500.bg-orange-500\/\[0\.01\], .dark div[class*="bg-orange-500/[0.01]"],
+.dark div.bg-blue-50, .dark div[class*="bg-blue-50"], .dark div.bg-orange-50, .dark div[class*="bg-orange-50"] {
+  background-color: #1e2128 !important;
+  border-color: #2b2f38 !important;
+  color: #D1D5DB !important; /* Description */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
+}
+.dark div.bg-orange-500\/\[0\.02\] span, .dark div[class*="bg-orange-500/[0.02]"] span,
+.dark div.bg-orange-500\/\[0\.02\] p, .dark div[class*="bg-orange-500/[0.02]"] p {
+  color: #D1D5DB !important; /* Description */
+}
+.dark div.bg-orange-500\/\[0\.02\] b, .dark div[class*="bg-orange-500/[0.02]"] b,
+.dark .border-orange-500.bg-orange-500\/\[0\.01\] h4, .dark div[class*="bg-orange-500/[0.01]"] h4,
+.dark div.bg-orange-500\/\[0\.02\] strong { 
+  color: #FFFFFF !important; /* Title */
+}
+.dark div.bg-orange-500\/\[0\.02\] svg, .dark div[class*="bg-orange-500/[0.02]"] svg { 
+  color: #5865F2 !important; 
+}
+.dark .border-orange-500.bg-orange-500\/\[0\.01\] svg, .dark div[class*="bg-orange-500/[0.01]"] svg { 
+  color: #D1D5DB !important; 
+}
+.dark div.bg-orange-500\/\[0\.02\] .text-zinc-500, .dark div[class*="bg-orange-500/[0.02]"] .text-zinc-500 {
+  color: #9CA3AF !important; /* Muted */
+}
+
+/* DARK TEXT VISIBILITY FIXES */
+.dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6, .dark .font-bold, .dark .font-extrabold { color: #FFFFFF !important; }
+.dark .text-zinc-900, .dark .text-zinc-800, .dark .text-gray-900, .dark .text-slate-900, .dark .text-black, .dark .text-white { color: #FFFFFF !important; }
+.dark .text-zinc-600, .dark .text-zinc-700, .dark .text-gray-600, .dark .text-slate-600 { color: #D1D5DB !important; }
+.dark .text-zinc-400, .dark .text-zinc-500, .dark .text-gray-400, .dark .text-slate-400 { color: #9CA3AF !important; }
+.dark p, .dark span, .dark div, .dark label { color: #D1D5DB; } 
+.dark p.text-xs, .dark p.text-sm, .dark .text-zinc-450 { color: #C7CCD1 !important; }
+
+/* DARK ICONS */
+.dark svg, .dark aside svg, .dark header svg, .dark button svg, .dark a svg, .dark td svg, .dark li svg, .dark .flex svg, .dark .relative svg,
+.dark .bg-white svg, .dark .rounded-xl.border svg, .dark .rounded-2xl svg { 
+  color: #D1D5DB !important; 
+}
+/* Ensure Profile/Export #5865F2 icons stay blue */
+.dark svg.text-orange-400, .dark svg.text-orange-500, .dark svg.text-orange-550, .dark svg.text-orange-600,
+.dark .text-orange-400 svg, .dark .text-orange-500 svg, .dark .text-orange-550 svg, .dark .text-orange-600 svg { color: #5865F2 !important; }
+
+/* DARK ICON HOVER */
+.dark button:hover svg, .dark a:hover svg, .dark aside button:hover svg, .dark aside a:hover svg, .dark header button:hover svg, .dark header a:hover svg {
+  color: #5865F2 !important;
+}
+
+/* Dark Icon Hover Background Fix */
+.dark button.hover\:bg-blue-50:hover, .dark button.hover\:bg-zinc-100:hover, .dark button.hover\:bg-gray-100:hover,
+.dark a.hover\:bg-blue-50:hover, .dark a.hover\:bg-zinc-100:hover, .dark a.hover\:bg-gray-100:hover,
+.dark .hover\:bg-zinc-100:hover {
+  background-color: rgba(88, 101, 242, 0.15) !important;
+  border-color: rgba(88, 101, 242, 0.3) !important;
+}
+
+/* Dark Inputs */
+.dark input, .dark textarea, .dark select {
+  background-color: #23272f !important;
+  border: 1px solid #2b2f38 !important;
+  color: #FFFFFF !important;
+}
+.dark input:focus, .dark textarea:focus, .dark select:focus {
+  border-color: #5865F2 !important;
+  box-shadow: 0 0 0 2px rgba(88, 101, 242, 0.25) !important;
+}
+.dark input::placeholder, .dark textarea::placeholder { color: #9CA3AF !important; }
+.dark select option { background-color: #1e2128 !important; color: #FFFFFF !important; }
+
+/* Dark Secondary Buttons */
+.dark .bg-zinc-100, .dark .bg-gray-100, .dark .bg-zinc-200, .dark button.bg-zinc-900, .dark button.bg-zinc-800, .dark button.bg-zinc-700, .dark button.bg-zinc-950 {
+  background-color: #2b2f38 !important;
+  color: #FFFFFF !important;
+  border: 1px solid #2b2f38 !important;
+}
+
+/* Dark Tables */
+.dark table { background-color: #1e2128 !important; }
+.dark th, .dark td { border-color: #2b2f38 !important; }
+.dark th { background-color: #181a20 !important; color: #FFFFFF !important; }
+.dark td { color: #D1D5DB !important; }
+
+/* Dark Global Borders */
+.dark, .dark *, .dark ::before, .dark ::after { border-color: #2b2f38 !important; }
+
+
+/* =========================================
+   PRIMARY BRAND BUTTONS (Solid Blue Overrides)
+   Shared across both modes, always overwrites everything else
+   ========================================= */
+.bg-\[\#2563EB\], .bg-blue-500, .bg-blue-600, .bg-orange-500, .bg-indigo-500, .bg-indigo-600 {
+  background-color: #5865F2 !important;
+  color: #FFFFFF !important;
+  border-color: #5865F2 !important;
+}
+
+/* Ensure icons inside primary buttons are pure white */
+.bg-\[\#2563EB\] svg, .bg-blue-500 svg, .bg-blue-600 svg, .bg-orange-500 svg, .bg-indigo-500 svg, .bg-indigo-600 svg {
+  color: #FFFFFF !important;
+}
+
+.hover\:bg-\[\#1D4ED8\]:hover, .hover\:bg-blue-600:hover, .hover\:bg-blue-700:hover, .hover\:bg-orange-600:hover {
+  background-color: #6b77ff !important;
+  border-color: #6b77ff !important;
+}
+
+.focus\:ring-\[\#3B82F6\]:focus {
+  --tw-ring-color: #5865F2 !important;
+}
+
+/* Fix specific SVG coloring to ensure visibility in all primary buttons */
+button[class*="bg-blue-"] svg, a[class*="bg-blue-"] svg { color: #FFFFFF !important; }
+.dark button[class*="bg-blue-"] svg, .dark a[class*="bg-blue-"] svg { color: #FFFFFF !important; }
+
+/* =========================================
+   GLOBAL EXPORT METADATA ICON CONSISTENCY
+   ========================================= */
+svg.lucide-file-json {
+  color: #4B5563 !important;
+}
+.dark svg.lucide-file-json {
+  color: #D1D5DB !important;
+}
