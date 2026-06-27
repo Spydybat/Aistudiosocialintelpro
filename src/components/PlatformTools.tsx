@@ -857,180 +857,71 @@ const MediaPreview = ({
 
     const elementsList: React.ReactNode[] = [];
 
-    if (platform === 'instagram') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const audioExists = hasAudioKeyword || noKeywords;
-      const imageExists = hasImageKeyword || noKeywords || hasVideoKeyword || hasAudioKeyword;
-
-      // 1. MAIN CONTENT PREVIEW
-      if (videoExists) {
-        elementsList.push(<InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />);
-      } else if (imageExists) {
-        elementsList.push(<InteractiveImagePreview key="cover-main" src={mockData.coverUrl} label="Image Preview" />);
-      }
-
-      // 2. AUDIO PREVIEW
-      if (audioExists) {
-        elementsList.push(<InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />);
-      }
-
-      // 3. CAPTION PREVIEW
-      elementsList.push(renderCaption());
-
-      // 4. COVER / THUMBNAIL PREVIEW
-      if (imageExists && videoExists) {
-        elementsList.push(<InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Cover Preview" />);
-      }
-
-      // 5. PROFILE PREVIEW
-      elementsList.push(renderProfile());
-    } else if (platform === 'twitter') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const audioExists = hasAudioKeyword || noKeywords;
-      const imageExists = hasImageKeyword || noKeywords || hasVideoKeyword || hasAudioKeyword;
-
-      // 1. MAIN CONTENT PREVIEW
-      if (videoExists) {
-        elementsList.push(<InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />);
-      } else if (imageExists) {
-        elementsList.push(<InteractiveImagePreview key="cover-main" src={mockData.coverUrl} label="Tweet Media Cover Preview" />);
-      }
-
-      // 2. AUDIO PREVIEW
-      if (audioExists) {
-        elementsList.push(<InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />);
-      }
-
-      // 3. CAPTION PREVIEW
-      elementsList.push(renderCaption());
-
-      // 4. COVER / THUMBNAIL PREVIEW
-      if (imageExists && videoExists) {
-        elementsList.push(<InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Tweet Media Cover Preview" />);
-      }
-
-      // 5. PROFILE PREVIEW
-      elementsList.push(renderProfile());
-    } else if (platform === 'youtube') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const audioExists = hasAudioKeyword || noKeywords;
-      const imageExists = hasImageKeyword || noKeywords || hasVideoKeyword || hasAudioKeyword;
-
-      // 1. MAIN CONTENT PREVIEW
-      if (videoExists) {
-        elementsList.push(<InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />);
-      } else if (imageExists) {
-        elementsList.push(<InteractiveImagePreview key="cover-main" src={mockData.coverUrl} label="YouTube Video Thumbnail Preview" />);
-      }
-
-      // 2. AUDIO PREVIEW
-      if (audioExists) {
-        elementsList.push(<InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />);
-      }
-
-      // 3. CAPTION PREVIEW
-      elementsList.push(renderDescription());
-
-      // 4. COVER / THUMBNAIL PREVIEW
-      if (imageExists && videoExists) {
-        elementsList.push(<InteractiveImagePreview key="cover" src={mockData.coverUrl} label="YouTube Video Thumbnail Preview" />);
-      }
-
-      // 5. PROFILE PREVIEW
-      elementsList.push(renderProfile());
-    } else if (platform === 'threads') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const audioExists = hasAudioKeyword || noKeywords;
-
-      // 1. POST PREVIEW
-      if (mockData.hasPostContent) {
+    switch (platform) {
+      case 'twitter':
         elementsList.push(
-          <div key="post-preview-container" className="space-y-1 bg-zinc-50 dark:bg-zinc-900/20 p-2.5 rounded-xl border border-zinc-250/60 dark:border-zinc-850 text-left">
-            <span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider font-mono block">Post Image Preview</span>
-            <InteractiveImagePreview src={mockData.postImageUrl || mockData.coverUrl} label="Threads Post Image Slide" />
-          </div>
+          <InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />,
+          <InteractiveImagePreview key="photo" src={mockData.coverUrl} label="Photo Preview" />,
+          renderGIF(),
+          <InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Tweet Media Cover" />,
+          <InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />,
+          renderCaption(),
+          renderProfile()
         );
-      }
-
-      // 2. MEDIA PREVIEW
-      if (videoExists) {
+        break;
+      case 'youtube':
         elementsList.push(
-          <div key="media-preview-container" className="space-y-1 text-left">
-            <span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider font-mono block">Media Preview</span>
-            <InteractiveVideoPlayer src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />
-          </div>
+          <InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />,
+          <InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />,
+          <InteractiveImagePreview key="cover" src={mockData.coverUrl} label="YouTube Video Thumbnail Preview" />,
+          renderDescription(),
+          renderProfile()
         );
-      }
-
-      if (audioExists) {
-        elementsList.push(<InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />);
-      }
-
-      // 3. CAPTION PREVIEW
-      elementsList.push(renderCaption());
-
-      // 4. PROFILE PREVIEW
-      elementsList.push(renderProfile());
-    } else if (platform === 'tiktok') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const audioExists = hasAudioKeyword || noKeywords;
-      const imageExists = hasImageKeyword || noKeywords || hasVideoKeyword || hasAudioKeyword;
-
-      // 1. MAIN CONTENT PREVIEW
-      if (videoExists) {
-        elementsList.push(<InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />);
-      } else if (imageExists) {
-        elementsList.push(<InteractiveImagePreview key="cover-main" src={mockData.coverUrl} label="Cover Preview" />);
-      }
-
-      if (mockData.hasPostContent) {
+        break;
+      case 'snapchat':
         elementsList.push(
-          <div key="post-preview-container" className="space-y-1 bg-zinc-50 dark:bg-zinc-900/20 p-2.5 rounded-xl border border-zinc-250/60 dark:border-zinc-850 text-left">
-            <span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider font-mono block">Post Image Preview</span>
-            <InteractiveImagePreview src={mockData.postImageUrl || mockData.coverUrl} label="TikTok Post Image Slide" />
-          </div>
+          renderSnapstory(),
+          <InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-501-large.mp4" coverUrl={mockData.coverUrl} />,
+          renderCaption(),
+          renderProfile()
         );
-      }
-
-      // 2. AUDIO PREVIEW
-      if (audioExists) {
-        elementsList.push(<InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />);
-      }
-
-      // 3. CAPTION PREVIEW
-      elementsList.push(renderCaption());
-
-      // 4. COVER / THUMBNAIL PREVIEW
-      if (imageExists && videoExists) {
-        elementsList.push(<InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Cover Preview" />);
-      }
-
-      // 5. PROFILE PREVIEW
-      elementsList.push(renderProfile());
-    } else if (platform === 'snapchat') {
-      const videoExists = hasVideoKeyword || noKeywords;
-      const imageExists = hasImageKeyword || noKeywords;
-
-      // 1. MAIN CONTENT PREVIEW
-      elementsList.push(renderSnapstory());
-
-      // 2. AUDIO PREVIEW - N/A for snapchat
-
-      // 3. CAPTION PREVIEW
-      if (mockData.caption) {
-        elementsList.push(renderCaption());
-      }
-
-      // 4. COVER / THUMBNAIL PREVIEW
-      if (videoExists) {
-        elementsList.push(<InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-501-large.mp4" coverUrl={mockData.coverUrl} />);
-      }
-      if (imageExists) {
-        elementsList.push(<InteractiveImagePreview key="cover-snap" src={mockData.coverUrl} label="Image Preview" />);
-      }
-
-      // 5. PROFILE PREVIEW
-      elementsList.push(renderProfile());
+        break;
+      case 'threads':
+        elementsList.push(
+          <div key="media-preview-container" className="space-y-1 text-left"><span className="text-[10px] font-bold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider font-mono block">Media Preview</span><InteractiveVideoPlayer src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} /></div>,
+          <div key="post-preview-container" className="space-y-1 bg-zinc-50 dark:bg-zinc-900/20 p-2.5 rounded-xl border border-zinc-250/60 dark:border-zinc-850 text-left"><span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider font-mono block">Post Image Preview</span><InteractiveImagePreview src={mockData.postImageUrl || mockData.coverUrl} label="Threads Post Image Slide" /></div>,
+          renderCaption(),
+          renderProfile()
+        );
+        break;
+      case 'tiktok':
+        elementsList.push(
+          <InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />,
+          <div key="post-preview-container" className="space-y-1 bg-zinc-50 dark:bg-zinc-900/20 p-2.5 rounded-xl border border-zinc-250/60 dark:border-zinc-850 text-left"><span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider font-mono block">Post Image Preview</span><InteractiveImagePreview src={mockData.postImageUrl || mockData.coverUrl} label="TikTok Post Image Slide" /></div>,
+          <InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />,
+          renderCaption(),
+          <InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Cover Preview" />,
+          renderProfile()
+        );
+        break;
+      case 'instagram':
+      default:
+        const carouselImgs = mockData.carouselImages || [
+          'https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=800&h=450',
+          'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&h=450',
+          'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&h=450',
+          'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&h=450',
+        ];
+        elementsList.push(
+          <InteractiveVideoPlayer key="iv" src="https://assets.mixkit.co/videos/preview/mixkit-forest-stream-in-the-sunlight-529-large.mp4" coverUrl={mockData.coverUrl} />,
+          <InteractiveAudioPlayer key="ia" audioName={mockData.audioName} />,
+          renderCaption(),
+          <InteractiveImagePreview key="cover" src={mockData.coverUrl} label="Cover Preview" />,
+          <InteractiveImagePreview key="post-main" src={mockData.postImageUrl || mockData.coverUrl} label="Instagram Post Image Preview" />,
+          <InteractiveCarouselPreview key="carousel-main" images={carouselImgs} label="Instagram Carousel Preview" />,
+          renderProfile()
+        );
+        break;
     }
 
     if (elementsList.length === 0) {
@@ -1732,103 +1623,75 @@ export default function PlatformTools({
                         <span className="text-[10px] font-bold text-zinc-455 uppercase tracking-wider font-mono block">Download Options</span>
                         
                         <div className="grid grid-cols-2 gap-2.5">
-                          {platform === 'threads' ? (
-                            <>
-                              <button
-                                id="dl-all-post-btn"
-                                onClick={() => executeCaptureAllField('post', 'Static post image', '2.1 MB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <ImageIcon className="w-4 h-4 text-orange-500 shrink-0" />
-                                <span>Download Post</span>
-                              </button>
-
-                              <button
-                                id="dl-all-video-btn"
-                                onClick={() => executeCaptureAllField('media', 'Threads HD Media stream', '12.4 MB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <Tv className="w-4 h-4 text-zinc-450 shrink-0" />
-                                <span>Download Media</span>
-                              </button>
-
-                              <button
-                                id="dl-all-caption-btn"
-                                onClick={() => executeCaptureAllField('caption', 'Formatted captions metadata', '4 KB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <FileText className="w-4 h-4 text-zinc-455 shrink-0" />
-                                <span>Download Caption</span>
-                              </button>
-
-                              <button
-                                id="dl-all-dp-btn"
-                                onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 col-span-1 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <Globe className="w-4 h-4 text-zinc-400 shrink-0" />
-                                <span>Download Profile Image</span>
-                              </button>
-                            </>
-                          ) : (
-                            <>
-                              <button
-                                id="dl-all-video-btn"
-                                onClick={() => executeCaptureAllField('video', 'Reels video stream', '12.4 MB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <Tv className="w-4 h-4 text-zinc-450 shrink-0" />
-                                <span>Download Video</span>
-                              </button>
-
-                              <button
-                                id="dl-all-audio-btn"
-                                onClick={() => executeCaptureAllField('audio', 'Original extracted MP3 track', '3.5 MB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <Music className="w-4 h-4 text-zinc-455 shrink-0" />
-                                <span>Download Audio</span>
-                              </button>
-
-                              <button
-                                id="dl-all-caption-btn"
-                                onClick={() => executeCaptureAllField('caption', 'Formatted captions metadata', '4 KB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <FileText className="w-4 h-4 text-zinc-450 shrink-0" />
-                                <span>Download Caption</span>
-                              </button>
-
-                              <button
-                                id="dl-all-cover-btn"
-                                onClick={() => executeCaptureAllField('thumbnail', 'Ultra HD cover photography', '1.4 MB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" />
-                                <span>Download Cover</span>
-                              </button>
-
-                              <button
-                                id="dl-all-dp-btn"
-                                onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')}
-                                className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 col-span-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                              >
-                                <Globe className="w-4 h-4 text-zinc-400 shrink-0" />
-                                <span>Download Profile Image</span>
-                              </button>
-
-                              {platform === 'tiktok' && mockData.hasPostContent && (
-                                <button
-                                  id="dl-all-post-btn"
-                                  onClick={() => executeCaptureAllField('post', 'Static post image', '2.1 MB')}
-                                  className="py-2 px-3 border border-zinc-200 text-xs font-semibold text-zinc-800 rounded-xl transition flex items-center gap-2 col-span-2 hover:bg-zinc-50 dark:bg-[#2563EB] dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none shadow-sm cursor-pointer"
-                                >
-                                  <ImageIcon className="w-4 h-4 text-orange-500 shrink-0 animate-pulse" />
-                                  <span>Download Post</span>
-                                </button>
-                              )}
-                            </>
-                          )}
+                          {(() => {
+                            const btnClass = "py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 dark:bg-[#2563EB] dark:border dark:border-[#3B82F6] dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none cursor-pointer";
+                            
+                            if (platform === 'twitter') {
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('video', 'Twt Video Downloader', '12.4 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Video</span></button>
+                                  <button onClick={() => executeCaptureAllField('photo', 'Photo Extractor', '2.1 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Photo</span></button>
+                                  <button onClick={() => executeCaptureAllField('gif', 'GIF Capture Tool', '4.5 MB')} className={btnClass}><Share2 className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download GIF</span></button>
+                                  <button onClick={() => executeCaptureAllField('cover', 'Tweet Media Cover', '1.4 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Cover</span></button>
+                                  <button onClick={() => executeCaptureAllField('audio', 'Audio Extractor', '3.5 MB')} className={btnClass}><Music className="w-4 h-4 text-zinc-455 shrink-0" /><span>Download Audio</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Caption Downloader', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Caption</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={`${btnClass} col-span-2`}><Globe className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile Image</span></button>
+                                </>
+                              );
+                            } else if (platform === 'youtube') {
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('video', 'Video Downloader', '12.4 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Video</span></button>
+                                  <button onClick={() => executeCaptureAllField('audio', 'Audio Downloader', '3.5 MB')} className={btnClass}><Music className="w-4 h-4 text-zinc-455 shrink-0" /><span>Download Audio</span></button>
+                                  <button onClick={() => executeCaptureAllField('thumbnail', 'Thumbnail Downloader', '1.4 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Thumbnail</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Description Downloader', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Description</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={`${btnClass} col-span-2`}><Share2 className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile Picture</span></button>
+                                </>
+                              );
+                            } else if (platform === 'snapchat') {
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('story', 'Story Downloader', '5.2 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Story</span></button>
+                                  <button onClick={() => executeCaptureAllField('video', 'Media Downloader', '12.4 MB')} className={btnClass}><Play className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Media</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Caption Downloader', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Caption</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={btnClass}><Share2 className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile</span></button>
+                                </>
+                              );
+                            } else if (platform === 'threads') {
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('media', 'Threads HD Media stream', '12.4 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Media</span></button>
+                                  <button onClick={() => executeCaptureAllField('post', 'Static post image', '2.1 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Post</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Formatted captions metadata', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-455 shrink-0" /><span>Download Caption</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={btnClass}><Globe className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile Image</span></button>
+                                </>
+                              );
+                            } else if (platform === 'tiktok') {
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('video', 'Video Downloader', '12.4 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Video</span></button>
+                                  <button onClick={() => executeCaptureAllField('post', 'Static post image', '2.1 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Post</span></button>
+                                  <button onClick={() => executeCaptureAllField('audio', 'Audio Extractor', '3.5 MB')} className={btnClass}><Music className="w-4 h-4 text-zinc-455 shrink-0" /><span>Download Audio</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Caption Downloader', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Caption</span></button>
+                                  <button onClick={() => executeCaptureAllField('cover', 'Video Cover', '1.4 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Cover</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={btnClass}><Globe className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile Image</span></button>
+                                </>
+                              );
+                            } else {
+                              // instagram fallback
+                              return (
+                                <>
+                                  <button onClick={() => executeCaptureAllField('video', 'Reels video stream', '12.4 MB')} className={btnClass}><Tv className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Video</span></button>
+                                  <button onClick={() => executeCaptureAllField('audio', 'Original extracted MP3 track', '3.5 MB')} className={btnClass}><Music className="w-4 h-4 text-zinc-455 shrink-0" /><span>Download Audio</span></button>
+                                  <button onClick={() => executeCaptureAllField('caption', 'Formatted captions metadata', '4 KB')} className={btnClass}><FileText className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Caption</span></button>
+                                  <button onClick={() => executeCaptureAllField('cover', 'Ultra HD cover photography', '1.4 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Cover</span></button>
+                                  <button onClick={() => executeCaptureAllField('post', 'Static post image', '2.1 MB')} className={btnClass}><ImageIcon className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Post</span></button>
+                                  <button onClick={() => executeCaptureAllField('carousel', 'Multi-slide image carousel', '8.4 MB')} className={btnClass}><Layers className="w-4 h-4 text-zinc-450 shrink-0" /><span>Download Carousel</span></button>
+                                  <button onClick={() => executeCaptureAllField('profile_pic', 'Author avatar graphic', '450 KB')} className={`${btnClass} col-span-2`}><Globe className="w-4 h-4 text-zinc-400 shrink-0" /><span>Download Profile Image</span></button>
+                                </>
+                              );
+                            }
+                          })()}
                         </div>
                       </div>
 
@@ -1978,7 +1841,7 @@ export default function PlatformTools({
                           <button
                             id="execute-standalone-save-btn"
                             onClick={handleSingleDownload}
-                            className={`w-full py-3 text-white font-extrabold text-xs rounded-xl transition ${colors?.primary} dark:bg-[#2563EB] dark:border dark:border-[#3B82F6] dark:text-white dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none flex items-center justify-center gap-2 cursor-pointer shadow`}
+                            className={`w-full py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 dark:bg-[#2563EB] dark:border dark:border-[#3B82F6] dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none cursor-pointer`}
                           >
                             <Download className="w-4 h-4 animate-bounce" />
                             <span>
@@ -1999,7 +1862,7 @@ export default function PlatformTools({
                             <button
                               id="copy-preset-caption-btn-v2"
                               onClick={triggerCopyCaption}
-                              className="py-2.5 px-4.5 border border-zinc-200 text-zinc-750 dark:border-[#334155]/60 hover:bg-zinc-50 dark:bg-slate-900 dark:text-zinc-200 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer"
+                              className="w-full py-2 px-3 bg-zinc-900 hover:bg-zinc-850 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 dark:bg-[#2563EB] dark:border dark:border-[#3B82F6] dark:hover:bg-[#1D4ED8] dark:active:bg-[#1E40AF] dark:focus:bg-[#1E40AF] focus:ring-2 focus:ring-[#3B82F6] focus:outline-none cursor-pointer"
                             >
                               {copiedCaptionSuccess ? <CheckCircle className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-orange-500" />}
                               <span>{copiedCaptionSuccess ? 'Caption Copied!' : 'Copy Caption Characters to Clipboard'}</span>

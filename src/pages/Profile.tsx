@@ -374,9 +374,12 @@ export default function Profile() {
                 type="button"
                 onClick={handleDeleteAccount}
                 disabled={deletingAccount || !DELETE_ACCOUNT_ENABLED}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-60 text-white text-xs font-bold rounded-lg transition"
+                className="px-4 py-2 !bg-[#dc2626] hover:!bg-[#b91c1c] disabled:opacity-60 text-xs font-bold rounded-lg transition flex items-center justify-center gap-2"
               >
-                {deletingAccount ? "Deleting…" : "Delete account"}
+                <Trash2 className="w-4 h-4 !text-[#ffffff] dark:!text-[#ffffff]" />
+                <span className="!text-[#ffffff] dark:!text-[#ffffff]">
+                  {deletingAccount ? "Deleting…" : "Delete account"}
+                </span>
               </button>
               <p className="text-[10px] text-zinc-500">
                 This option is currently disabled until the backend is ready.

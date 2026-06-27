@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Fingerprint, Lock, Mail, ShieldAlert, User as UserIcon } from "lucide-react";
 import { motion } from "motion/react";
@@ -13,6 +13,33 @@ export default function Login() {
   const location = useLocation();
   const from =
     (location.state as { from?: string } | null)?.from ?? "/";
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const originalClasses = Array.from(root.classList);
+
+    const applySystemTheme = (e: MediaQueryListEvent | MediaQueryList) => {
+      root.classList.remove('dark', 'light');
+      if (e.matches) {
+        root.classList.add('dark');
+      } else {
+        root.classList.add('light');
+      }
+    };
+
+    applySystemTheme(mediaQuery);
+    const listener = (e: MediaQueryListEvent) => applySystemTheme(e);
+    mediaQuery.addEventListener('change', listener);
+
+    return () => {
+      mediaQuery.removeEventListener('change', listener);
+      root.className = '';
+      if (originalClasses.length > 0) {
+        root.classList.add(...originalClasses);
+      }
+    };
+  }, []);
 
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
@@ -60,6 +87,26 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 font-sans antialiased">
+      <style>{`
+        /* Autofill overrides specifically for Auth forms */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 30px #fafafa inset !important;
+          -webkit-text-fill-color: #18181b !important;
+          transition: background-color 5000s ease-in-out 0s !important;
+        }
+
+        .dark input:-webkit-autofill,
+        .dark input:-webkit-autofill:hover, 
+        .dark input:-webkit-autofill:focus, 
+        .dark input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 30px #23272f inset !important;
+          -webkit-text-fill-color: #FFFFFF !important;
+          transition: background-color 5000s ease-in-out 0s !important;
+        }
+      `}</style>
       <motion.div
         initial={{ opacity: 0, scale: 0.98, y: 12 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

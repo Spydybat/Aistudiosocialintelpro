@@ -144,51 +144,83 @@ export default function PricingSection({
         </p>
 
         {/* MONTHLY / YEARLY TOGGLE */}
-        <div className="flex items-center justify-center gap-3 pt-4">
-          <span className={`text-xs ${billingInterval === 'monthly' ? 'font-bold text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}`}>Monthly Billing</span>
-          <button
-            id="billing-interval-toggle-btn"
-            onClick={() => setBillingInterval(billingInterval === 'monthly' ? 'yearly' : 'monthly')}
-            className="w-12 h-6 rounded-full bg-zinc-200 dark:bg-zinc-850 p-1 relative flex items-center transition"
-          >
-            <motion.div
-              animate={{ x: billingInterval === 'yearly' ? '24px' : '0px' }}
-              className="w-4 h-4 rounded-full bg-orange-500 shadow"
-            />
-          </button>
-          <span className={`text-xs flex items-center gap-1.5 ${billingInterval === 'yearly' ? 'font-bold text-zinc-800 dark:text-zinc-200' : 'text-zinc-400'}`}>
-            Yearly Billed
-            <span className="text-[9px] font-black font-mono px-1.5 py-0.5 bg-emerald-550/10 text-emerald-500 rounded uppercase">Save 35%</span>
-          </span>
+        <div className="flex justify-center pt-6">
+          <div className="flex items-center p-1 bg-zinc-100 dark:bg-zinc-900 rounded-full border border-zinc-200 dark:border-zinc-800 shadow-inner">
+            <button
+              id="billing-interval-monthly-btn"
+              onClick={() => setBillingInterval('monthly')}
+              className={`relative px-5 py-2 text-xs font-bold rounded-full transition-colors duration-300 ${
+                billingInterval === 'monthly'
+                  ? 'text-zinc-900 dark:text-zinc-100'
+                  : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+              }`}
+            >
+              {billingInterval === 'monthly' && (
+                <motion.div
+                  layoutId="pricing-billing-toggle"
+                  className="absolute inset-0 bg-white dark:bg-zinc-700 rounded-full shadow-sm border border-zinc-200 dark:border-zinc-600"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">Monthly Billing</span>
+            </button>
+            
+            <button
+              id="billing-interval-yearly-btn"
+              onClick={() => setBillingInterval('yearly')}
+              className={`relative px-5 py-2 text-xs font-bold rounded-full transition-colors duration-300 flex items-center gap-1.5 ${
+                billingInterval === 'yearly'
+                  ? 'text-zinc-900 dark:text-zinc-100'
+                  : 'text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+              }`}
+            >
+              {billingInterval === 'yearly' && (
+                <motion.div
+                  layoutId="pricing-billing-toggle"
+                  className="absolute inset-0 bg-white dark:bg-zinc-700 rounded-full shadow-sm border border-zinc-200 dark:border-zinc-600"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-1.5">
+                Yearly Billing
+                <span className="text-[10px] font-black font-mono px-1.5 py-0.5 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 rounded-full uppercase">Save 35%</span>
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* COUPLON / DISCOUNTS BAR */}
-      <div className="max-w-md mx-auto p-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-2xl flex items-center gap-3">
-        <Percent className="w-4 h-4 text-orange-500 shrink-0" />
-        <input
-          id="discount-code-input"
-          type="text"
-          placeholder="Apply promo (Try SI50 or TRIALFREE)"
-          value={couponCode}
-          onChange={(e) => setCouponCode(e.target.value)}
-          className="bg-transparent text-xs text-zinc-900 dark:text-zinc-100 flex-1 outline-none font-semibold uppercase placeholder-zinc-400"
-        />
-        <button
-          id="apply-coupon-btn"
-          onClick={applyCoupon}
-          className="text-[10px] font-bold text-orange-500 hover:text-orange-600 transition tracking-wide shrink-0 px-2 py-1 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded"
-        >
-          Validate Code
-        </button>
-      </div>
+      {/* COUPON / DISCOUNTS BAR */}
+      <div className="max-w-md mx-auto p-5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-900 rounded-2xl space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Percent className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+            <input
+              id="discount-code-input"
+              type="text"
+              placeholder="APPLY PROMO (TRY SI50 OR TRIALFREE)"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+              className="w-full pl-9 p-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-lg text-xs text-zinc-900 dark:text-zinc-100 outline-none focus:border-orange-500 transition uppercase placeholder-zinc-400 font-semibold"
+            />
+          </div>
+          <button
+            id="apply-coupon-btn"
+            onClick={applyCoupon}
+            disabled={!couponCode.trim()}
+            className="w-full sm:w-auto px-5 py-2.5 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 disabled:hover:bg-orange-500 text-white font-bold text-xs rounded-lg transition shrink-0 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-950 shadow-sm shadow-orange-500/20"
+          >
+            Validate Code
+          </button>
+        </div>
 
-      {couponSuccess && (
-        <p className="text-center text-xs text-emerald-600 dark:text-emerald-400 font-semibold max-w-sm mx-auto">{couponSuccess}</p>
-      )}
-      {couponError && (
-        <p className="text-center text-xs text-red-500 font-semibold max-w-sm mx-auto">{couponError}</p>
-      )}
+        {couponSuccess && (
+          <p className="text-center text-xs text-emerald-600 dark:text-emerald-400 font-semibold animate-fade-in">{couponSuccess}</p>
+        )}
+        {couponError && (
+          <p className="text-center text-xs text-red-500 font-semibold animate-fade-in">{couponError}</p>
+        )}
+      </div>
 
       {/* 2. THREE CORE CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
@@ -464,7 +496,13 @@ export default function PricingSection({
                     <td className="p-3">{inv.date}</td>
                     <td className="p-3 font-bold">{inv.amount}</td>
                     <td className="p-3">
-                      <span className="py-0.5 px-2 bg-emerald-500/10 text-emerald-500 font-mono text-[10px] rounded-full uppercase">
+                      <span className={`py-1 px-2.5 font-medium text-[10px] rounded-full inline-flex items-center justify-center ${
+                        inv.status.toLowerCase() === 'paid' ? 'bg-emerald-500 text-white' :
+                        inv.status.toLowerCase() === 'pending' ? 'bg-amber-500 text-white' :
+                        inv.status.toLowerCase() === 'failed' ? 'bg-red-500 text-white' :
+                        inv.status.toLowerCase() === 'refunded' ? 'bg-blue-500 text-white' :
+                        'bg-zinc-500 text-white'
+                      }`}>
                         {inv.status}
                       </span>
                     </td>

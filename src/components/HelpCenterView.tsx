@@ -247,9 +247,9 @@ export default function HelpCenterView() {
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto self-stretch md:self-center">
           <button
             onClick={() => setSupportModalOpen('email')}
-            className="flex-1 sm:flex-initial py-2.5 px-4 bg-[#2563EB] hover:bg-blue-700 text-white font-medium text-xs rounded-xl shadow-sm hover:shadow transition flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-initial py-2.5 px-4 bg-zinc-100 hover:bg-zinc-250 dark:bg-zinc-900 dark:hover:bg-zinc-850 text-zinc-800 dark:text-zinc-200 font-medium text-xs rounded-xl border border-zinc-200 dark:border-zinc-800 transition flex items-center justify-center gap-2"
           >
-            <Mail className="w-4 h-4" />
+            <Mail className="w-4 h-4 text-blue-500" />
             Email Support
           </button>
           <button
@@ -261,7 +261,7 @@ export default function HelpCenterView() {
           </button>
           <button
             onClick={() => setSupportModalOpen('feature')}
-            className="flex-1 sm:flex-initial py-2.5 px-4 bg-orange-500/10 text-orange-650 dark:text-orange-400 border border-orange-500/20 hover:bg-orange-500/15 font-medium text-xs rounded-xl transition flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-initial py-2.5 px-4 bg-zinc-100 hover:bg-zinc-250 dark:bg-zinc-900 dark:hover:bg-zinc-850 text-zinc-800 dark:text-zinc-200 font-medium text-xs rounded-xl border border-zinc-200 dark:border-zinc-800 transition flex items-center justify-center gap-2"
           >
             <Lightbulb className="w-4 h-4 text-orange-500" />
             Feature Request
