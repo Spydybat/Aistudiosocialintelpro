@@ -7,25 +7,15 @@ import React, { useState, useMemo } from 'react';
 import { PlatformType, ExplorerContent, ExplorerProfile, User } from '../types';
 import { 
   Search, 
-  Filter, 
   SlidersHorizontal, 
-  CheckCircle2, 
   FolderDown, 
   FileJson, 
   FileSpreadsheet, 
-  Clock, 
-  FileCheck, 
-  HelpCircle, 
   AlertCircle,
   Play,
   Volume2,
-  Tv,
-  Music,
   Download,
-  Fingerprint,
   Calendar,
-  Layers,
-  Sparkles
 } from 'lucide-react';
 import { 
   generateDynamicProfile, 
@@ -141,12 +131,12 @@ export default function AccountExplorerView({
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
   // Strict URL and history states as requested by ACCOUNT EXPLORER URL HISTORY FIX
-  const [previousUrl, setPreviousUrl] = useState<string | null>(null);
-  const [urlHistory, setUrlHistory] = useState<string[]>([]);
-  const [recentUrls, setRecentUrls] = useState<string[]>([]);
-  const [cachedUrls, setCachedUrls] = useState<string[]>([]);
-  const [processedUrls, setProcessedUrls] = useState<string[]>([]);
-  const [sourceUrl, setSourceUrl] = useState<string | null>(null);
+  const [, setPreviousUrl] = useState<string | null>(null);
+  const [, setUrlHistory] = useState<string[]>([]);
+  const [, setRecentUrls] = useState<string[]>([]);
+  const [, setCachedUrls] = useState<string[]>([]);
+  const [, setProcessedUrls] = useState<string[]>([]);
+  const [, setSourceUrl] = useState<string | null>(null);
 
   const forceResetAllUrlStates = () => {
     setPreviousUrl(null);

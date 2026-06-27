@@ -7,11 +7,9 @@ import React, { useState } from 'react';
 import { User, BillingInvoice } from '../types';
 import { 
   Check, 
-  HelpCircle, 
   Sparkles, 
   CreditCard, 
   Percent, 
-  ArrowRight, 
   FileCheck, 
   Lock, 
   AlertCircle 

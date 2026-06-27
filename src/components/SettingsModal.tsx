@@ -16,13 +16,7 @@ import {
   CreditCard, 
   Cpu, 
   Check, 
-  HelpCircle,
-  ToggleLeft,
-  X,
-  Volume2,
-  Trash2
 } from 'lucide-react';
-import { motion } from 'motion/react';
 
 interface SettingsModalProps {
   user: User | null;
@@ -30,6 +24,7 @@ interface SettingsModalProps {
   onUpdateSettings: (settings: UserSettings) => void;
   onUpdateTheme: (theme: 'light' | 'dark' | 'system') => void;
   openBilling: () => void;
+  onOpenProfile: () => void;
 }
 
 type SettingsSection = 'account' | 'appearance' | 'downloads' | 'exports' | 'notifications' | 'security' | 'privacy' | 'billing' | 'aiSettings';
@@ -39,7 +34,8 @@ export default function SettingsModal({
   settings,
   onUpdateSettings,
   onUpdateTheme,
-  openBilling
+  openBilling,
+  onOpenProfile
 }: SettingsModalProps) {
   const [activeTab, setActiveTab] = useState<SettingsSection>('account');
 
@@ -155,43 +151,23 @@ export default function SettingsModal({
 
               {user ? (
                 <div className="space-y-4 text-xs">
-                  <div className="p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-100 dark:border-zinc-850 rounded-xl flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white text-sm">
-                      {user.displayName.charAt(0).toUpperCase()}
+                  <button
+                    id="settings-open-profile"
+                    type="button"
+                    onClick={onOpenProfile}
+                    className="w-full rounded-xl border border-zinc-200 dark:border-zinc-900 p-3 bg-zinc-50 dark:bg-zinc-900/60 text-left transition hover:border-orange-500 hover:bg-zinc-100 dark:hover:bg-zinc-900"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white text-sm">
+                        {user.displayName.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">Profile</h4>
+                        <p className="text-[10px] text-zinc-500">Manage your account profile, password, avatar and account options.</p>
+                      </div>
+                      <UserIcon className="w-4 h-4 text-orange-500 shrink-0" />
                     </div>
-                    <div>
-                      <h4 className="font-bold text-zinc-900 dark:text-zinc-100">{user.displayName}</h4>
-                      <p className="text-[10px] text-zinc-500 font-mono">Workspace account key: {user.id}</p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Display Moniker</label>
-                    <input
-                      id="setting-account-name"
-                      type="text"
-                      className="w-full p-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-lg text-zinc-900 dark:text-zinc-100 font-medium"
-                      value={settings.account.displayName}
-                      onChange={(e) => {
-                        onUpdateSettings({
-                          ...settings,
-                          account: { ...settings.account, displayName: e.target.value }
-                        });
-                      }}
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Registrant Email</label>
-                    <input
-                      id="setting-account-email"
-                      type="email"
-                      className="w-full p-2.5 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-850 rounded-lg text-zinc-500 dark:text-zinc-400 font-medium"
-                      value={user.email}
-                      readOnly
-                    />
-                    <p className="text-[9px] text-zinc-500">To transfer your seat, please submit a corporate security ticket.</p>
-                  </div>
+                  </button>
                 </div>
               ) : (
                 <p className="text-xs text-zinc-500 italic py-6">Please log in to change secure account attributes.</p>

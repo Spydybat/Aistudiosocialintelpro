@@ -13,13 +13,10 @@ import {
   Github, 
   Chrome, 
   Smartphone, 
-  Compass, 
   ShieldAlert, 
   Fingerprint, 
   RefreshCw, 
   CheckCircle,
-  Clock,
-  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -45,7 +42,6 @@ export default function AuthModal({
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
-  const [verificationCode, setVerificationCode] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');

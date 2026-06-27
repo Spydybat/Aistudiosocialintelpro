@@ -19,17 +19,13 @@ import {
   Tv, 
   Download, 
   Compass, 
-  ArrowRight, 
-  Clock, 
   Database,
   FileJson,
   FileSpreadsheet,
   Cpu,
   TrendingUp,
-  History,
   Activity
 } from 'lucide-react';
-import { motion } from 'motion/react';
 
 interface HomeViewProps {
   setCurrentView: (view: AppView) => void;
@@ -43,10 +39,9 @@ interface HomeViewProps {
 export default function HomeView({
   setCurrentView,
   setActivePlatform,
-  downloads,
-  exports: exportHistory,
-  history,
-  onSelectAction
+  exports: _exportHistory,
+  history: _history,
+  onSelectAction: _onSelectAction
 }: HomeViewProps) {
 
   const platforms = [

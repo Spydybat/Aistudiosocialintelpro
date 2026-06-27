@@ -10,28 +10,24 @@ import {
   Link2, 
   Copy, 
   FileText, 
-  Music, 
   Image as ImageIcon, 
   Tv, 
   Layers, 
   Share2, 
-  Cpu, 
-  AlertCircle, 
-  CheckCircle, 
-  HelpCircle,
+  CheckCircle,
   FileJson,
   FileSpreadsheet,
   Globe,
-  Sparkles,
   Play,
-  ArrowLeft
+  ArrowLeft,
+  Music,
+  Sparkles
 } from 'lucide-react';
 import { 
   handleExportJSON, 
   handleExportCSV, 
   handleExportXLSX 
 } from '../lib/exporter';
-import { motion } from 'motion/react';
 
 /// Dynamic Content Attribute Resolver
 export const getCompiledContentAttributes = (p: PlatformType, urlStr: string) => {
@@ -92,7 +88,7 @@ export const getCompiledContentAttributes = (p: PlatformType, urlStr: string) =>
 };
 
 // Interactive Video Player with Play, Pause, Duration, Seek Bar, Current Time, Volume, Mute
-const InteractiveVideoPlayer = ({ src, coverUrl }: { src: string; coverUrl?: string; key?: string }) => {
+const InteractiveVideoPlayer = ({ src }: { src: string; coverUrl?: string; key?: string }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -1112,12 +1108,12 @@ export default function PlatformTools({
   });
 
   // Strict URL states for resetting as requested by CRITICAL FORCE FIX
-  const [previousUrl, setPreviousUrl] = useState<string | null>(null);
-  const [urlHistory, setUrlHistory] = useState<string[]>([]);
-  const [recentUrls, setRecentUrls] = useState<string[]>([]);
-  const [cachedUrls, setCachedUrls] = useState<string[]>([]);
-  const [processedUrls, setProcessedUrls] = useState<string[]>([]);
-  const [sourceUrl, setSourceUrl] = useState<string | null>(null);
+  const [, setPreviousUrl] = useState<string | null>(null);
+  const [, setUrlHistory] = useState<string[]>([]);
+  const [, setRecentUrls] = useState<string[]>([]);
+  const [, setCachedUrls] = useState<string[]>([]);
+  const [, setProcessedUrls] = useState<string[]>([]);
+  const [, setSourceUrl] = useState<string | null>(null);
 
   // Helper to force reset ALL historical or previous states
   const forceResetAllUrlStates = () => {
@@ -1284,13 +1280,13 @@ export default function PlatformTools({
   const mockData = getMockDataForPlatform(platform);
 
   // Simulated captures (kept for backwards compatibility with previous definitions)
-  const [capturedCaption, setCapturedCaption] = useState(() => {
+  const [capturedCaption] = useState(() => {
     return sessionStorage.getItem(`platform_tools_${platform}_capturedCaption`) || mockData.caption;
   });
-  const [capturedAudioName, setCapturedAudioName] = useState(() => {
+  const [capturedAudioName] = useState(() => {
     return sessionStorage.getItem(`platform_tools_${platform}_capturedAudioName`) || mockData.audioName;
   });
-  const [capturedMediaSource, setCapturedMediaSource] = useState(() => {
+  const [capturedMediaSource] = useState(() => {
     return sessionStorage.getItem(`platform_tools_${platform}_capturedMediaSource`) || mockData.coverUrl;
   });
 

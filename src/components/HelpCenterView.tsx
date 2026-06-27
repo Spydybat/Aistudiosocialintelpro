@@ -19,7 +19,6 @@ import {
   Bug, 
   Lightbulb, 
   X, 
-  CheckCircle2,
   ArrowRight
 } from 'lucide-react';
 

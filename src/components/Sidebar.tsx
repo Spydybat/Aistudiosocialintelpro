@@ -11,11 +11,10 @@ import {
   User 
 } from '../types';
 import LogoIcon from './LogoIcon';
-import { 
+import {
   Download, 
   Settings, 
   CreditCard, 
-  Menu, 
   X,
   Share2,
   Instagram,
@@ -26,7 +25,9 @@ import {
   ChevronUp,
   LogOut,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  History,
+  FileArchive
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -131,14 +132,6 @@ export default function Sidebar({
     { id: 'tiktok', label: 'TikTok', icon: Share2, color: 'text-cyan-400 hover:bg-cyan-50 dark:hover:bg-cyan-950/20' },
   ];
 
-  const [lastSettingsClick, setLastSettingsClick] = useState<'profile' | 'settings' | null>(null);
-
-  useEffect(() => {
-    if (currentView !== 'settings') {
-      setLastSettingsClick(null);
-    }
-  }, [currentView]);
-
   const getDropdownItemClass = (isActive: boolean) => {
     return `flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[14px] font-[500] transition-colors w-full text-left opacity-100 ` +
       (isActive 
@@ -153,11 +146,6 @@ export default function Sidebar({
         ? `text-[#FFFFFF]` 
         : `text-[#111827] dark:text-[#D1D5DB]`
       );
-  };
-
-  const handleHelpAction = () => {
-    alert("Help Resources:\n\n• Documentation: Visit socialintel.com/docs\n• Support Ticket: Open Settings > Billing Center or contact support@socialintel.com\n• Direct Hotline: Call 1-800-SOCIAL-INTEL");
-    setDropdownOpen(false);
   };
 
   return (
@@ -296,6 +284,30 @@ export default function Sidebar({
                         {activeDownloadsCount}
                       </span>
                     )}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setCurrentView('download-history');
+                      setDropdownOpen(false);
+                      setIsOpen(false);
+                    }}
+                    className={getDropdownItemClass(currentView === 'download-history')}
+                  >
+                    <History className={getIconClass(currentView === 'download-history')} />
+                    <span>Download History</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setCurrentView('saved-exports');
+                      setDropdownOpen(false);
+                      setIsOpen(false);
+                    }}
+                    className={getDropdownItemClass(currentView === 'saved-exports')}
+                  >
+                    <FileArchive className={getIconClass(currentView === 'saved-exports')} />
+                    <span>Saved Exports</span>
                   </button>
 
                   <button

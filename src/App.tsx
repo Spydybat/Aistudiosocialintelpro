@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import { mapSupabaseUserToAppUser } from './lib/auth';
 import { 
@@ -27,13 +27,23 @@ import PlatformTools from './components/PlatformTools';
 import AccountExplorerView from './components/AccountExplorerView';
 import HomeView from './components/HomeView';
 import HelpCenterView from './components/HelpCenterView';
-import { Compass, Sparkles, HelpCircle, Layers, CreditCard, Download, ShieldAlert } from 'lucide-react';
+import Profile from './pages/Profile';
+import DownloadHistory from './pages/DownloadHistory';
+import SavedExports from './pages/SavedExports';
+import { Compass, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { addDownloadHistory } from './lib/downloadHistory';
+import { addSavedExport } from './lib/savedExports';
 
 const LOCAL_STORAGE_KEY = 'socialintel_pro_state_v2';
 
-export default function App() {
+interface AppProps {
+  initialView?: AppView;
+}
+
+export default function App({ initialView = 'home' }: AppProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user: authUser, signOut: authSignOut } = useAuth();
   
   // Theme state
@@ -138,10 +148,10 @@ export default function App() {
 
   // Temporary download file popup states
   const [activeDownloadPopupFile, setActiveDownloadPopupFile] = useState<string | null>(null);
-  const downloadPopupTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const downloadPopupTimeoutRef = useRef<number | null>(null);
 
   // Active Routing views
-  const [currentView, setCurrentView] = useState<AppView>('home');
+  const [currentView, setCurrentView] = useState<AppView>(initialView);
   const [activePlatform, setActivePlatform] = useState<PlatformType>('instagram');
   const [presetUsername, setPresetUsername] = useState<string>('');
   const [explorerTabActive, setExplorerTabActive] = useState(false);
@@ -158,7 +168,7 @@ export default function App() {
   } | null>(null);
 
   // Browser-like navigation stack
-  const [historyStack, setHistoryStack] = useState<AppView[]>(['home']);
+  const [historyStack, setHistoryStack] = useState<AppView[]>([initialView]);
   const [historyIndex, setHistoryIndex] = useState<number>(0);
 
   const navigateTo = (view: AppView) => {
@@ -251,6 +261,14 @@ export default function App() {
       window.removeEventListener('popstate', handlePopState);
     };
   }, [historyStack, historyIndex]);
+
+  useEffect(() => {
+    if (location.pathname === '/profile' && currentView !== 'profile') {
+      setCurrentView('profile');
+      setHistoryStack(prev => (prev[prev.length - 1] === 'profile' ? prev : [...prev, 'profile']));
+      setHistoryIndex(prev => prev + 1);
+    }
+  }, [location.pathname, currentView]);
 
   // Controlled sidebar state with responsive default and local storage persistence
   const [sidebarOpen, setSidebarOpen] = useState(() => {
@@ -414,7 +432,7 @@ export default function App() {
         );
         if (!hasQueuedOrDownloading) return prevDownloads;
 
-        return prevDownloads.map((item) => {
+        const nextDownloads = prevDownloads.map((item) => {
           if (item.status === 'queued') {
             return { ...item, status: 'downloading', progress: 5 };
           }
@@ -428,11 +446,33 @@ export default function App() {
           }
           return item;
         });
+
+        nextDownloads.forEach((item) => {
+          const previousItem = prevDownloads.find((download) => download.id === item.id);
+          const isNewlyCompleted = item.status === 'completed' && previousItem?.status !== 'completed';
+
+          if (isNewlyCompleted && user?.id) {
+            void addDownloadHistory({
+              user_id: user.id,
+              platform: item.platform,
+              url: item.url,
+              file_name: item.filename ?? getFriendlyFilename(item),
+              file_size: item.size,
+              status: 'completed',
+            }).then(({ error }) => {
+              if (!error) {
+                window.dispatchEvent(new Event('download-history:updated'));
+              }
+            });
+          }
+        });
+
+        return nextDownloads;
       });
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [user?.id]);
 
   // Derived Values
   const activeDownloadsCount = downloads.filter(
@@ -496,7 +536,7 @@ export default function App() {
     }
   };
 
-  const handleAddExportLog = (filename: string, details: string) => {
+  const handleAddExportLog = async (filename: string, details: string) => {
     const newLog: HistoryItem = {
       id: `exp_${Date.now()}`,
       type: 'export',
@@ -506,6 +546,23 @@ export default function App() {
       details: details
     };
     setExports(prev => [newLog, ...prev]);
+
+    const extension = filename.split('.').pop()?.toLowerCase();
+    if (user?.id && (extension === 'csv' || extension === 'json')) {
+      const exportType = details.includes('All Downloader') ? 'All Downloader' : 'Account Explorer';
+      const fileFormat = extension?.toUpperCase() ?? 'CSV';
+      const fileSize = extension === 'json' ? '18 KB' : '12 KB';
+
+      await addSavedExport({
+        user_id: user.id,
+        file_name: filename,
+        export_type: exportType,
+        file_format: fileFormat,
+        file_size: fileSize,
+      });
+
+      window.dispatchEvent(new Event('saved-exports:updated'));
+    }
   };
 
   // Manage Active Queue actions
@@ -788,11 +845,51 @@ export default function App() {
                     setSettings(prev => ({ ...prev, appearance: themeId }));
                   }}
                   openBilling={() => navigateTo('pricing')}
+                  onOpenProfile={() => navigateTo('profile')}
                 />
               </motion.div>
             )}
 
-            {/* VIEW 5: HELP CENTER */}
+            {/* VIEW 5: PROFILE */}
+            {(currentView === 'profile' || (currentView === 'download-center' && lastNonDownloadCenterState?.view === 'profile')) && (
+              <motion.div
+                key="profile-canvas"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={currentView === 'download-center' ? 'hidden' : ''}
+              >
+                <Profile />
+              </motion.div>
+            )}
+
+            {/* VIEW 6: DOWNLOAD HISTORY */}
+            {(currentView === 'download-history' || (currentView === 'download-center' && lastNonDownloadCenterState?.view === 'download-history')) && (
+              <motion.div
+                key="download-history-canvas"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={currentView === 'download-center' ? 'hidden' : ''}
+              >
+                <DownloadHistory />
+              </motion.div>
+            )}
+
+            {/* VIEW 7: SAVED EXPORTS */}
+            {(currentView === 'saved-exports' || (currentView === 'download-center' && lastNonDownloadCenterState?.view === 'saved-exports')) && (
+              <motion.div
+                key="saved-exports-canvas"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={currentView === 'download-center' ? 'hidden' : ''}
+              >
+                <SavedExports />
+              </motion.div>
+            )}
+
+            {/* VIEW 8: HELP CENTER */}
             {(currentView === 'help' || (currentView === 'download-center' && lastNonDownloadCenterState?.view === 'help')) && (
               <motion.div
                 key="help-canvas"

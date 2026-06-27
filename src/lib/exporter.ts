@@ -320,7 +320,7 @@ All rights reserved © Socialintel
   }, null, 2));
 
   // Sort and Categorize Media into folders
-  selectedContent.forEach((item, index) => {
+  selectedContent.forEach((item) => {
     const safeCaption = item.caption.substring(0, 30).replace(/[^a-zA-Z0-9]/g, '_') || `item_${item.id}`;
     const descText = `Socialintel Downloaded Asset
 ID: ${item.id}

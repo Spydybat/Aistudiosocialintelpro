@@ -5,7 +5,7 @@
 
 export type PlatformType = 'instagram' | 'twitter' | 'youtube' | 'snapchat' | 'threads' | 'tiktok';
 
-export type AppView = 'home' | 'tools' | 'pricing' | 'settings' | 'download-center' | 'profile' | 'help';
+export type AppView = 'home' | 'tools' | 'pricing' | 'settings' | 'download-center' | 'profile' | 'download-history' | 'saved-exports' | 'help';
 
 export interface User {
   id: string;
